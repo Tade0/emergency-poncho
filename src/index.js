@@ -100,11 +100,6 @@ function roundStatus(status) {
 }
 
 function correctHeaders(headerObject) {
-  if (headerObject['content-type']) {
-    debugger;
-    headerObject['content-type'] = headerObject['content-type'].replace('text/css', 'application/css');
-  }
-
-  delete headerObject['content-encoding'];
-  delete headerObject['content-length'];
+  delete headerObject['content-encoding']; // Remove probable gzip
+  delete headerObject['content-length']; // Don't chunk
 }
