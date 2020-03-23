@@ -64,6 +64,17 @@ if (arguments.harContent) {
       res.end(content.text);
     });
 
+    app.post(`${url}\*`, (req, res) => {
+      const exact = POST.find(({search}) => req.url.endsWith(search));
+
+      if (exact) {
+        indexes.POST = POST.indexOf(exact);
+      }
+
+      const {status, headers, content} = POST[indexes.POST].response;
+
+      console.log(`POST ${url}${POST[indexes.POST].search}`);
+
       res.status(roundStatus(status));
 
       if (headers) {
@@ -80,11 +91,13 @@ if (arguments.harContent) {
         );  
       }
 
+      indexes.POST = (indexes.POST + 1) % POST.length;
+
       res.end(content.text);
     });
   });
 
-  app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+  app.listen(port, () => console.log(`Listening on port ${port}!`));
 }
 
 function deepCopy(obj) {
