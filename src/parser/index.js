@@ -5,10 +5,12 @@ module.exports.parseHar = function(har) {
   const result = {};
 
   entries.forEach(entry => {
-    const {pathname} = url.parse(entry.request.url);
+    const {pathname, search} = url.parse(entry.request.url);
 
-    if (!result[pathname]) {
-      result[pathname] = {
+    const key = pathname;
+
+    if (!result[key]) {
+      result[key] = {
         GET: [],
         POST: [],
         PUT: [],
@@ -16,7 +18,10 @@ module.exports.parseHar = function(har) {
       };
     }
 
-    result[pathname][entry.request.method].push(entry);
+    result[key][entry.request.method].push({
+      ...entry,
+      search
+    });
   });
 
   return result;

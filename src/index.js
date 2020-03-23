@@ -30,12 +30,39 @@ if (arguments.harContent) {
 
   Object.keys(indexedEntries).forEach(url => {
     const entry = indexedEntries[url];
-    const {indexes, GET} = entry;
+    const {indexes, GET, POST} = entry;
 
-    app.get(url, (req, res) => {
+    app.get(`${url}\*`, (req, res) => {
+      const exact = GET.find(({search}) => req.url.endsWith(search));
+
+      if (exact) {
+        indexes.GET = GET.indexOf(exact);
+      }
+
       const {status, headers, content} = GET[indexes.GET].response;
 
-      console.log(`GET ${url}`);
+      console.log(`GET ${url}${GET[indexes.GET].search}`);
+
+      res.status(roundStatus(status));
+
+      if (headers) {
+        const headerObject = headers.reduce((acc, header) => {
+          acc[header.name] = header.value;
+
+          return acc;
+        }, {});
+
+        correctHeaders(headerObject);
+
+        res.set(
+          headerObject
+        );
+      }
+
+      indexes.GET = (indexes.GET + 1) % GET.length;
+
+      res.end(content.text);
+    });
 
       res.status(roundStatus(status));
 
