@@ -20,7 +20,7 @@ module.exports.parseHar = function(har) {
 
     result[key][entry.request.method].push({
       ...entry,
-      search
+      search: search ? search : ''
     });
   });
 
