@@ -89,5 +89,6 @@ function roundStatus(status) {
 }
 
 function correctHeaders(headerObject) {
+  delete headerObject['Content-Encoding'];
   delete headerObject['content-encoding']; // Remove probable gzip
 }
