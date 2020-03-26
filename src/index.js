@@ -1,7 +1,7 @@
 const express = require('express');
 const url = require('url');
 const app = express();
-const port = 3000;
+const port = 4520;
 const {parseArguments} = require('./cli');
 const {parseHar} = require('./parser');
 
