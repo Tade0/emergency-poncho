@@ -1,4 +1,5 @@
 const express = require('express');
+const url = require('url');
 const app = express();
 const port = 3000;
 const {parseArguments} = require('./cli');
@@ -28,20 +29,22 @@ if (arguments.harContent) {
     return acc;
   }, {});
 
-  Object.keys(indexedEntries).forEach(url => {
-    const entry = indexedEntries[url];
-    const {indexes, GET, POST} = entry;
+  app.use((req, res, next) => {
+    const {pathname, search} = url.parse(req.url);
+    const entry = indexedEntries[pathname];
 
-    app.get(`${url}\*`, (req, res) => {
-      const exact = GET.find(({search}) => req.url.endsWith(search));
+    if (entry) {
+      const {indexes} = entry;
+      const exact = entry[req.method].find(item => item.search === search);
 
       if (exact) {
-        indexes.GET = GET.indexOf(exact);
+        indexes[req.method] = entry[req.method].indexOf(exact);
       }
 
-      const {status, headers, content} = GET[indexes.GET].response;
+      const indexedEntry = entry[req.method][indexes[req.method]];
+      const {status, headers, content} = indexedEntry.response;
 
-      console.log(`GET ${url}${GET[indexes.GET].search}`);
+      console.log(`${req.method} ${req.url}${indexedEntry.search}`);
 
       res.status(roundStatus(status));
 
@@ -59,42 +62,15 @@ if (arguments.harContent) {
         );
       }
 
-      indexes.GET = (indexes.GET + 1) % GET.length;
+      indexes[req.method] = (indexes[req.method] + 1) % entry[req.method].length;
 
       res.end(content.text);
-    });
+    } else {
+      res.status(404);
+      res.end('');
+    }
 
-    app.post(`${url}\*`, (req, res) => {
-      const exact = POST.find(({search}) => req.url.endsWith(search));
-
-      if (exact) {
-        indexes.POST = POST.indexOf(exact);
-      }
-
-      const {status, headers, content} = POST[indexes.POST].response;
-
-      console.log(`POST ${url}${POST[indexes.POST].search}`);
-
-      res.status(roundStatus(status));
-
-      if (headers) {
-        const headerObject = headers.reduce((acc, header) => {
-          acc[header.name] = header.value;
-
-          return acc;
-        }, {});
-
-        correctHeaders(headerObject);
-
-        res.set(
-          headerObject
-        );  
-      }
-
-      indexes.POST = (indexes.POST + 1) % POST.length;
-
-      res.end(content.text);
-    });
+    next();
   });
 
   app.listen(port, () => console.log(`Listening on port ${port}!`));
@@ -114,5 +90,4 @@ function roundStatus(status) {
 
 function correctHeaders(headerObject) {
   delete headerObject['content-encoding']; // Remove probable gzip
-  delete headerObject['content-length']; // Don't chunk
 }
