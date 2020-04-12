@@ -10,7 +10,8 @@ Emergency Poncho is an [HTTP Archive](https://confluence.atlassian.com/kb/genera
 ## Usage
 
  1. Save a *.har file from the Network tab in your Browser.
- 1. `npm start my-archive.har`
+ 1. Go to this repo's directory and `npm link`.
+ 1. `emergency-poncho my-archive.har`
 
 ## Use cases
  - Bug reproduction

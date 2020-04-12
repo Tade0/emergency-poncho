@@ -7,12 +7,15 @@
     "test": "test"
   },
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node bin/emergency-poncho.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Tadeusz Piskozub",
   "license": "CC-BY-SA-4.0",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "bin": {
+    "emergency-poncho": "bin/emergency-poncho.js"
   }
 }
