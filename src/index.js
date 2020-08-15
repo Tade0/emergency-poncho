@@ -28,7 +28,14 @@ module.exports.main = function(arguments) {
     }, {});
 
     app.use((req, res, next) => {
-      const {pathname, search} = url.parse(req.url);
+      let {pathname, search} = url.parse(req.url);
+
+      if (pathname === '/') {
+        [pathname] = Object.keys(indexedEntries);
+        res.redirect(pathname);
+        return;
+      }
+
       const entry = indexedEntries[pathname];
 
       if (entry) {
