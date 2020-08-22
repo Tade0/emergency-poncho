@@ -24,3 +24,4 @@ Logo by the irreverent [Yanson](https://www.instagram.com/yansonart/).
 ## Caveats
 
 - By default Firefox limits the size of recorded responses to 1MB. To switch this off, go to `about:config` and set `devtools.netmonitor.responseBodyLimit` to `0`.
+- When recording via Firefox make sure you check the "disable cache" checkbox in the network tab.
