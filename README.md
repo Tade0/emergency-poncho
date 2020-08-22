@@ -20,3 +20,7 @@ Emergency Poncho is an [HTTP Archive](https://confluence.atlassian.com/kb/genera
 ----
 
 Logo by the irreverent [Yanson](https://www.instagram.com/yansonart/).
+
+## Caveats
+
+- By default Firefox limits the size of recorded responses to 1MB. To switch this off, go to `about:config` and set `devtools.netmonitor.responseBodyLimit` to `0`.
