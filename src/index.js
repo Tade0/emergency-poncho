@@ -31,9 +31,12 @@ module.exports.main = function(arguments) {
       let {pathname, search} = url.parse(req.url);
 
       if (pathname === '/') {
-        [pathname] = Object.keys(indexedEntries);
-        res.redirect(pathname);
-        return;
+        [redirectURL] = Object.keys(indexedEntries);
+
+        if (pathname !== redirectURL) {
+          res.redirect(redirectURL);
+          return;
+        }
       }
 
       const entry = indexedEntries[pathname];
