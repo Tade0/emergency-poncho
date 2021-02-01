@@ -98,6 +98,8 @@ function roundStatus(status) {
 }
 
 function correctHeaders(headerObject) {
+  delete headerObject['Content-Length'];
+  delete headerObject['content-length']; // Sometimes badly reported in *.har
   delete headerObject['Content-Encoding'];
   delete headerObject['content-encoding']; // Remove probable gzip
 }
