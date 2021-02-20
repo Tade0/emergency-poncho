@@ -90,7 +90,7 @@ function deepCopy(obj) {
 }
 
 function roundStatus(status) {
-  if (status < 400) {
+  if (status < 300) {
     return 200;
   }
 
