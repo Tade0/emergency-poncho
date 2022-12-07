@@ -13,7 +13,7 @@
   "author": "Tadeusz Piskozub",
   "license": "CC-BY-SA-4.0",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.18.2"
   },
   "bin": {
     "emergency-poncho": "bin/emergency-poncho.js"
